@@ -1,0 +1,61 @@
+.product {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+/* Стили для изображений */
+.product img {
+  width: 150px;
+  height: 150px;
+}
+
+/* Стили для корзины */
+#cart {
+  border: 1px solid #020202;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+/* Стили для кнопок */
+.btn {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #b4c233;
+}
+
+/* Стили для флекс-сетки */
+#products {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Стили для счётчика */
+.counter {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}

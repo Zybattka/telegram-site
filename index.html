@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+<div id="products">
+  <div class="product">
+    <span class="counter"></span>
+    <img src="images/image1.png" alt="Товар 1">
+    <h3>Товар 1</h3>
+    <p>Цена: $10000</p>
+    <button class="btn add-to-cart" data-price="10000">Добавить в корзину</button>
+  </div>
+  <div class="product">
+    <span class="counter"></span>
+    <img src="images/image2.png" alt="Товар 2">
+
+    <h3>Товар 2</h3>
+    <p>Цена: $20000</p>
+    <button class="btn add-to-cart" data-price="20000">Добавить в корзину</button>
+  </div>
+  <div class="product">
+    <span class="counter"></span>
+    <img src="images/image3.png" alt="Товар 3">
+    <h3>Товар 3</h3>
+    <p>Цена: $30000</p>
+    <button class="btn add-to-cart" data-price="30000">Добавить в корзину</button>
+  </div>
+  <div class="product">
+    <span class="counter"></span>
+    <img src="images/image4.png" alt="Товар 4">
+    <h3>Товар 4</h3>
+    <p>Цена: $35000</p>
+    <button class="btn add-to-cart" data-price="35000">Добавить в корзину</button>
+  </div>
+  <div class="product">
+    <span class="counter"></span>
+    <img src="images/image5.png" alt="Товар 5">
+    <h3>Товар 5</h3>
+    <p>Цена: $40000</p>
+    <button class="btn add-to-cart" data-price="40000">Добавить в корзину</button>
+  </div>
+  <div class="product">
+    <span class="counter"></span>
+    <img src="images/image6.png" alt="Товар 6">
+    <h3>Товар 6</h3>
+    <p>Цена: $39990</p>
+    <button class="btn add-to-cart" data-price="39990">Добавить в корзину</button>
+  </div>
+  <!-- Дополнительные товары ... -->
+
+</div>
+<div class="cart">
+  <div id="cart-items"></div>
+  <p id="total-price">Суммарная цена: $0</p>
+  <button class="btn" onclick="checkout()">Оплатить</button>
+  <button class="btn" onclick="continueShopping()">Вернуться к покупкам</button>
+</div>
+<script>
+  var cartItems = [];
+
+  function updateCounter() {
+    var counterElements = document.getElementsByClassName("counter");
+    for (var i = 0; i < counterElements.length; i++) {
+      var product =
+
+              counterElements[i].parentNode;
+      var count = 0;
+      for (var j = 0; j < cartItems.length; j++) {
+        if (cartItems[j].name === product.querySelector("h3").textContent) {
+          count += cartItems[j].count;
+        }
+      }
+      if (count > 0) {
+        counterElements[i].textContent = count;
+        counterElements[i].style.display = "inline-block";
+
+        var addToCartButton = product.querySelector(".add-to-cart");
+        addToCartButton.textContent = "+";
+        addToCartButton.style.width = "50%";
+
+        var removeButton = product.querySelector(".remove-from-cart");
+
+        if (!removeButton) {
+          removeButton = document.createElement("button");
+          removeButton.className = "btn remove-from-cart";
+          removeButton.textContent = "Удалить из корзины";
+          removeButton.setAttribute("data-name", product.querySelector("h3").textContent);
+          removeButton.addEventListener("click", removeFromCart);
+          product.appendChild(removeButton);
+        }
+      } else {
+        counterElements[i].style.display = "none";
+
+        var addToCartButton = product.querySelector(".add-to-cart");
+
+        addToCartButton.textContent = "Добавить в корзину";
+        addToCartButton.style.width = "100%";
+
+        var removeButton = product.querySelector(".remove-from-cart");
+        if (removeButton) {
+          removeButton.parentNode.removeChild(removeButton);
+        }
+      }
+    }
+  }
+
+  function updateCart() {
+    var cartItemsDiv = document.getElementById("cart-items");
+    cartItemsDiv.innerHTML = "";
+    for (var i = 0; i < cartItems.length; i++) {
+
+      var item = cartItems[i];
+      var itemDiv = document.createElement("div");
+
+
+
+      cartItemsDiv.appendChild(itemDiv);
+      updateCounter();
+    }
+
+    var totalPrice = cartItems.reduce(function (accumulator, item) {
+      return accumulator + item.price * item.count;
+    }, 0);
+
+
+    document.getElementById("total-price").textContent = "Суммарная цена: $" + totalPrice;
+  }
+
+  function addToCart(event) {
+    var button = event.target;
+    var price = parseFloat(button.getAttribute("data-price"));
+    var name = button.parentNode.querySelector("h3").textContent;
+
+    var itemIndex = -1;
+
+    for (var i = 0; i < cartItems.length; i++) {
+      if (cartItems[i].name === name) {
+        itemIndex = i;
+        break;
+
+      }
+    }
+
+    if (itemIndex !== -1) {
+      cartItems[itemIndex].count++;
+    } else {
+      cartItems.push({
+        name: name,
+        price: price,
+        count: 1
+      });
+    }
+
+    updateCart();
+    updateCounter();
+  }
+
+  function removeFromCart(event) {
+    var button = event.target;
+    var name = button.getAttribute("data-name");
+
+
+    var itemIndex = -1;
+
+    for (var i = 0; i < cartItems.length; i++) {
+      if (cartItems[i].name === name) {
+        itemIndex = i;
+        break;
+      }
+    }
+
+    if (itemIndex !== -1) {
+      if (cartItems[itemIndex].count > 1) {
+        cartItems[itemIndex].count--;
+      } else {
+        cartItems.splice(itemIndex, 1);
+      }
+    }
+
+    updateCart();
+    updateCounter();
+  }
+
+
+  function checkout() {
+    // Здесь можно добавить код для обработки оплаты
+    alert("Оплата успешно выполнена!");
+    cartItems = [];
+    updateCart();
+    updateCounter();
+  }
+
+  function continueShopping() {
+    // Здесь можно добавить код для возврата к покупкам
+    alert("Возвращаемся к покупкам...");
+  }
+
+  var addToCartButtons = document.getElementsByClassName("add-to-cart");
+  for (var i = 0; i < addToCartButtons.length; i++) {
+
+    addToCartButtons[i].addEventListener("click", addToCart);
+  }
+</script>
+</body>
+</html>
